@@ -131,6 +131,7 @@ celerybeat.pid
 # ⬇️ Secrets and local env files (never commit credentials; use *.example templates if needed)
 .env
 .env.*
+.env_
 !.env.example
 
 # ⬇️ Python virtual environments (machine-specific; commit requirements / lockfiles instead)
