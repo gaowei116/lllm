@@ -31,9 +31,16 @@ from deepagents.backends import CompositeBackend, FilesystemBackend, StateBacken
 
 from tools.internet_search import get_local_tools
 
-## ⬇️ Repo-root .env (full-stack-deepagents/.env)
-from dotenv import find_dotenv
-load_dotenv(find_dotenv(), override=True)
+## ⬇️ Load env from stack dir, then repo root `.env`, then repo root `.env_` (later files override)
+_STACK_ROOT = Path(__file__).resolve().parent.parent
+_REPO_ROOT = _STACK_ROOT.parent
+for _env_path in (
+    _STACK_ROOT / ".env",
+    _REPO_ROOT / ".env",
+    _REPO_ROOT / ".env_",
+):
+    if _env_path.is_file():
+        load_dotenv(_env_path, override=True)
 ## ⬇️ LangChain OpenAI reads OPENAI_BASE_URL; this project’s .env may use OPENAI_API_BASE
 if os.environ.get("OPENAI_API_BASE") and not os.environ.get("OPENAI_BASE_URL"):
     os.environ["OPENAI_BASE_URL"] = os.environ["OPENAI_API_BASE"].rstrip("/")

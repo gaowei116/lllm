@@ -1,11 +1,22 @@
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.resolve(__dirname, "..", "..", ".env") });
+const stackRoot = path.resolve(__dirname, "..");
+const repoRoot = path.resolve(__dirname, "..", "..");
+for (const envPath of [
+  path.join(stackRoot, ".env"),
+  path.join(repoRoot, ".env"),
+  path.join(repoRoot, ".env_"),
+]) {
+  if (fs.existsSync(envPath)) {
+    dotenv.config({ path: envPath, override: true });
+  }
+}
 
 const app = express();
 app.use(express.json({ limit: "1mb" }));
